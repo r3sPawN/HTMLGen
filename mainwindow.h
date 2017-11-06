@@ -7,6 +7,7 @@
 #include <QFileDialog>
 #include <QDesktopServices> //needed for opening a browser
 #include <QUrl> //needed for opening a browser
+#include <QFileInfo>
 
 namespace Ui {
 class MainWindow;
@@ -33,9 +34,12 @@ private slots:
 
     void on_actionPreview_triggered();
 
+    void on_actionSave_as_triggered();
+
 private:
     Ui::MainWindow *ui;
     QString sFilename;
+    QDir Path;
 };
 
 #endif // MAINWINDOW_H

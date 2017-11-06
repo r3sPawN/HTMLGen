@@ -47,10 +47,21 @@ void MainWindow::on_actionRedo_triggered() //redo
     ui->textEdit->redo();
 }
 
-void MainWindow::on_actionSave_triggered() //save
+void MainWindow::on_actionSave_triggered() //save (needs some more work)
 {
-    //QFile sFile(sFilename);
-    //if(sFile.open(QFile::WriteOnly | QFile::Text))
+    QFile sFile(sFilename);
+    if(sFile.open(QFile::WriteOnly | QFile::Text))
+    {
+        QTextStream out(&sFile);
+
+        out << ui -> textEdit -> toPlainText();
+
+        sFile.flush();
+        sFile.close();
+
+        //QFileInfo info(sFile);
+        //Path = info.absoluteDir();
+    }
 
 }
 
@@ -58,4 +69,15 @@ void MainWindow::on_actionPreview_triggered()
 {
     QString link = "https://www.google.bg";
     QDesktopServices::openUrl(QUrl(link));
+}
+
+void MainWindow::on_actionSave_as_triggered()
+{
+    QString File = QFileDialog::getSaveFileName(this,"Saving a file");
+
+    if(!File.isEmpty())
+    {
+        sFilename = File;
+        on_actionSave_triggered();
+    }
 }
