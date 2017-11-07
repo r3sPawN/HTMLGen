@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/Images">
+        <file>Images/icons8-add-file.png</file>
+        <file>Images/icons8-document.png</file>
+        <file>Images/icons8-file-preview.png</file>
+        <file>Images/icons8-redo(1).png</file>
+        <file>Images/icons8-save.png</file>
+        <file>Images/icons8-save-as.png</file>
+        <file>Images/undo.png</file>
+        <file>Images/redo.png</file>
+    </qresource>
+</RCC>

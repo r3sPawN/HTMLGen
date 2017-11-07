@@ -8,6 +8,7 @@
 #include <QDesktopServices> //needed for opening a browser
 #include <QUrl> //needed for opening a browser
 #include <QFileInfo>
+#include <QtDebug> // for testing
 
 namespace Ui {
 class MainWindow;
@@ -39,7 +40,7 @@ private slots:
 private:
     Ui::MainWindow *ui;
     QString sFilename;
-    QDir Path;
+    QString Path;
 };
 
 #endif // MAINWINDOW_H

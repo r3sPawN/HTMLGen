@@ -35,6 +35,7 @@ void MainWindow::on_actionNew_triggered() //new
 {
     sFilename = "";
     ui->textEdit->setPlainText("");
+
 }
 
 void MainWindow::on_actionUndo_triggered() //undo
@@ -59,16 +60,16 @@ void MainWindow::on_actionSave_triggered() //save (needs some more work)
         sFile.flush();
         sFile.close();
 
-        //QFileInfo info(sFile);
-        //Path = info.absoluteDir();
+        QFileInfo fileInfo(sFile);
+        Path = fileInfo.absoluteFilePath();
+
     }
 
 }
 
-void MainWindow::on_actionPreview_triggered()
+void MainWindow::on_actionPreview_triggered() //Preview
 {
-    QString link = "https://www.google.bg";
-    QDesktopServices::openUrl(QUrl(link));
+    QDesktopServices::openUrl(QUrl(Path));
 }
 
 void MainWindow::on_actionSave_as_triggered()
