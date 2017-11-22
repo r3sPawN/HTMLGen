@@ -26,7 +26,7 @@ void MainWindow::on_actionOpen_triggered() //open function
         QString text = in.readAll();
         sFile.close();
 
-        ui->textEdit->setPlainText(text);
+//        ui->textEdit->setPlainText(text);
     }
 
 }
@@ -34,18 +34,18 @@ void MainWindow::on_actionOpen_triggered() //open function
 void MainWindow::on_actionNew_triggered() //new
 {
     sFilename = "";
-    ui->textEdit->setPlainText("");
+//    ui->textEdit->setPlainText("");
 
 }
 
 void MainWindow::on_actionUndo_triggered() //undo
 {
-    ui->textEdit->undo();
+//    ui->textEdit->undo();
 }
 
 void MainWindow::on_actionRedo_triggered() //redo
 {
-    ui->textEdit->redo();
+//    ui->textEdit->redo();
 }
 
 void MainWindow::on_actionSave_triggered() //save (needs some more work)
@@ -55,7 +55,7 @@ void MainWindow::on_actionSave_triggered() //save (needs some more work)
     {
         QTextStream out(&sFile);
 
-        out << ui -> textEdit -> toPlainText();
+//        out << ui -> textEdit -> toPlainText();
 
         sFile.flush();
         sFile.close();
@@ -81,4 +81,62 @@ void MainWindow::on_actionSave_as_triggered()
         sFilename = File;
         on_actionSave_triggered();
     }
+}
+
+void MainWindow::getParsedItems() //Print the contents of the working area to console
+{
+    //reset everythinng
+    QString addedElements = NULL;
+    itemList.clear();
+
+    //gets items in the ui and appends them to items vector
+    for(int i = 0; i < ui->parseElements->count(); i++)
+    {
+        QListWidgetItem *item = ui->parseElements->item(i);
+        itemList.append(item -> text());
+    }
+
+    //pushes items to string addedElements
+    for(int i = 0; i < itemList.count(); i++)
+    {
+        addedElements.append(itemList[i]);
+    }
+    //prints the elements added by user and runs generation
+    qDebug() << addedElements << endl;
+    MainWindow::generateShittyHtml();
+}
+
+void MainWindow::generateShittyHtml() //Generates shit html and outputs it to the text box on the right.
+//Still have not figured out how to do the tag closing.
+{
+    QString htmlString = NULL;
+    html.clear();
+    html.append("<!DOCTYPE html>");
+    html.append("<head>");
+    html.append("</head>");
+    html.append("<body>");
+    for(int i = 0; i < itemList.count(); i++)
+    {
+        html.append(itemList[i]);
+    }
+    html.append("</body>");
+    html.append("</html>");
+
+    for(int i = 0; i < html.count(); i++)
+    {
+        htmlString.append(html[i] + '\n');
+    }
+    ui->textEdit->setPlainText(htmlString);
+}
+
+
+void MainWindow::on_parseElements_itemDoubleClicked(QListWidgetItem *item) //Delete item by doubleclicking
+{
+    QListWidgetItem *it = ui->parseElements->takeItem(ui->parseElements->currentRow());
+    delete it;
+}
+
+void MainWindow::on_actionDebug_triggered() //When clicking the "Debug" button write all of the elements to a vector for future use
+{
+    MainWindow::getParsedItems();
 }
