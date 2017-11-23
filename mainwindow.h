@@ -39,7 +39,7 @@ private slots:
 
     void on_actionSave_as_triggered();
 
-    void on_parseElements_itemDoubleClicked(QListWidgetItem *item);
+    void on_parseElements_itemDoubleClicked();
 
     void on_actionDebug_triggered();
 

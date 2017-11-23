@@ -130,7 +130,7 @@ void MainWindow::generateShittyHtml() //Generates shit html and outputs it to th
 }
 
 
-void MainWindow::on_parseElements_itemDoubleClicked(QListWidgetItem *item) //Delete item by doubleclicking
+void MainWindow::on_parseElements_itemDoubleClicked() //Delete item by doubleclicking
 {
     QListWidgetItem *it = ui->parseElements->takeItem(ui->parseElements->currentRow());
     delete it;
