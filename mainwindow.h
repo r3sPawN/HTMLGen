@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <htmlstore.h>
 #include <QMainWindow>
 #include <QtCore>
 #include <QtGui>
@@ -47,11 +48,10 @@ private:
     Ui::MainWindow *ui;
     QString sFilename;
     QString Path;
-    QVector<QString> itemList;
-    QVector<QString> html;
 
     void getParsedItems();
     void generateShittyHtml();
+    HTMLStore htmlstore;
 
 };
 

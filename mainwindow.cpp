@@ -85,50 +85,24 @@ void MainWindow::on_actionSave_as_triggered()
 
 void MainWindow::getParsedItems() //Print the contents of the working area to console
 {
-    //reset everythinng
-    QString addedElements = NULL;
-    itemList.clear();
-
-    //gets items in the ui and appends them to items vector
+//gets items in the ui and appends them to items vector
     for(int i = 0; i < ui->parseElements->count(); i++)
     {
         QListWidgetItem *item = ui->parseElements->item(i);
-        itemList.append(item -> text());
+        htmlstore.insertElement(i + 8, item -> text());
+        qDebug() << item->text() << endl;
     }
-
-    //pushes items to string addedElements
-    for(int i = 0; i < itemList.count(); i++)
-    {
-        addedElements.append(itemList[i]);
-    }
-    //prints the elements added by user and runs generation
-    qDebug() << addedElements << endl;
     MainWindow::generateShittyHtml();
 }
 
 void MainWindow::generateShittyHtml() //Generates shit html and outputs it to the text box on the right.
 //Still have not figured out how to do the tag closing.
 {
-    QString htmlString = NULL;
-    html.clear();
-    html.append("<!DOCTYPE html>");
-    html.append("<head>");
-    html.append("</head>");
-    html.append("<body>");
-    for(int i = 0; i < itemList.count(); i++)
-    {
-        html.append(itemList[i]);
-    }
-    html.append("</body>");
-    html.append("</html>");
-
-    for(int i = 0; i < html.count(); i++)
-    {
-        htmlString.append(html[i] + '\n');
-    }
-    ui->textEdit->setPlainText(htmlString);
+    HTMLStore htmlstore;
+    QString test1 = htmlstore.getAllElements();
+    ui->textEdit->setPlainText(test1);
+    qDebug().noquote() << test1 << endl;
 }
-
 
 void MainWindow::on_parseElements_itemDoubleClicked() //Delete item by doubleclicking
 {
