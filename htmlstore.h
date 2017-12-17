@@ -1,7 +1,6 @@
 #ifndef HTMLSTORE_H
 #define HTMLSTORE_H
 
-#include <mainwindow.h>
 #include <QVector>
 
 class HTMLStore
@@ -13,12 +12,13 @@ public:
     void insertElement(int line, QString text);
     QString getElementAt(int i);
     QString getAllElements();
-
-
+    int getSize();
+    void reset();
+    void initHtml();
 
 private:
     QVector<QString> htmlText;
-    void initHtml();
+
 };
 
 #endif // HTMLSTORE_H

@@ -170,7 +170,8 @@ p, li { white-space: pre-wrap; }
    <addaction name="actionRedo"/>
    <addaction name="separator"/>
    <addaction name="actionPreview"/>
-   <addaction name="actionDebug"/>
+   <addaction name="actionGenerate"/>
+   <addaction name="actionReset"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionNew">
@@ -239,9 +240,14 @@ p, li { white-space: pre-wrap; }
     <string>Save as</string>
    </property>
   </action>
-  <action name="actionDebug">
+  <action name="actionGenerate">
    <property name="text">
-    <string>Debug</string>
+    <string>Generate</string>
+   </property>
+  </action>
+  <action name="actionReset">
+   <property name="text">
+    <string>Reset</string>
    </property>
   </action>
  </widget>

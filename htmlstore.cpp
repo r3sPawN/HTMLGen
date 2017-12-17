@@ -46,3 +46,14 @@ void HTMLStore::insertElement(int line, QString text)
 {
     htmlText.insert(line, text);
 }
+
+int HTMLStore::getSize()
+{
+    return htmlText.size();
+}
+
+void HTMLStore::reset()
+{
+    htmlText.clear();
+    htmlText.squeeze();
+}

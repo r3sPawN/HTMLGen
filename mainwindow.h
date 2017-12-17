@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+
 #include <htmlstore.h>
 #include <QMainWindow>
 #include <QtCore>
@@ -42,7 +43,9 @@ private slots:
 
     void on_parseElements_itemDoubleClicked();
 
-    void on_actionDebug_triggered();
+    void on_actionGenerate_triggered();
+
+    void on_actionReset_triggered();
 
 private:
     Ui::MainWindow *ui;
@@ -52,7 +55,6 @@ private:
     void getParsedItems();
     void generateShittyHtml();
     HTMLStore htmlstore;
-
 };
 
 #endif // MAINWINDOW_H
