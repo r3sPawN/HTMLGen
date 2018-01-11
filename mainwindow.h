@@ -2,7 +2,10 @@
 #define MAINWINDOW_H
 
 
-#include <htmlstore.h>
+#include "htmlstore.h"
+#include "Objects/text.h"
+#include "Objects/image.h"
+#include "Objects/link.h"
 #include <QMainWindow>
 #include <QtCore>
 #include <QtGui>
@@ -52,8 +55,7 @@ private:
     QString sFilename;
     QString Path;
 
-    void getParsedItems();
-    void generateShittyHtml();
+    void generateHtml();
     HTMLStore htmlstore;
 };
 

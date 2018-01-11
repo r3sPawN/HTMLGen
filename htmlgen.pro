@@ -26,20 +26,23 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
+    htmlstore.cpp \
+    Objects/text.cpp \
     Objects/image.cpp \
-    Objects/url.cpp \
-    Objects/h1.cpp \
-    htmlstore.cpp
+    Objects/link.cpp
 
 HEADERS += \
     mainwindow.h \
+    htmlstore.h \
+    Objects/text.h \
     Objects/image.h \
-    Objects/url.h \
-    Objects/h1.h \
-    htmlstore.h
+    Objects/link.h
 
 FORMS += \
-    mainwindow.ui
+    mainwindow.ui \
+    Objects/text.ui \
+    Objects/image.ui \
+    Objects/link.ui
 
 RESOURCES += \
     appresource.qrc

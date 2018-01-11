@@ -79,35 +79,74 @@ void MainWindow::on_actionSave_as_triggered()
     }
 }
 
-void MainWindow::getParsedItems() //Print the contents of the working area to console
+void MainWindow::generateHtml() //Generates html and outputs it to the text box on the right.
 {
-//gets items in the ui and appends them to items vector
+    htmlstore.reset();
+    htmlstore.initHtml();
+    QListWidgetItem* nthItem;
+    QVariant itemData;
+
     for(int i = 0; i < ui->parseElements->count(); i++)
     {
-        QString item = ui->parseElements->item(i)->text();
-        htmlstore.insertElement(i + 8, item);
-    }
-    MainWindow::generateShittyHtml();
-}
+        nthItem = ui->parseElements->item(i);
+        if(nthItem->text().at(0) == "<")
+            nthItem->setData(32, nthItem->text());
 
-void MainWindow::generateShittyHtml() //Generates shit html and outputs it to the text box on the right.
-//Still have not figured out how to do the tag closing.
-{
-    QString test1 = htmlstore.getAllElements();
-    ui->textEdit->setPlainText(test1);
-    qDebug().noquote() << test1 << endl;
+        itemData = nthItem->data(32);
+
+        if (itemData.value<QString>() == NULL)
+            nthItem->setData(32, "Element still uninitialized. Doubleclick it to get started!");
+
+        itemData = nthItem->data(32);
+        htmlstore.insertElement(i + 8, itemData.value<QString>());
+    }
+
+    QString bodyContent = htmlstore.getAllElements();
+    ui->textEdit->setPlainText(bodyContent);
 }
 
 void MainWindow::on_parseElements_itemDoubleClicked()
 {
+    QListWidgetItem* currentItem = ui->parseElements->currentItem();
+    QString currentItemString = currentItem->text();
 
+    if (currentItemString.at(0) == "<")
+    {
+        qDebug() << "Nothing to edit!" << endl;
+    }
+
+    else if (currentItemString == "img")
+    {
+        Image* img = new Image(0, currentItemString);
+        img->setModal(true);
+        img->exec();
+        currentItem->setData(32, img->getFullString());
+    }
+
+    else if (currentItemString == "a")
+    {
+        Link* url = new Link(0, currentItemString);
+        url->setModal(true);
+        url->exec();
+        currentItem->setData(32, url->getFullString());
+    }
+
+    else
+    {
+        Text* txt = new Text(0, currentItemString);
+        txt->setModal(true);
+        txt->exec();
+        currentItem->setData(32, txt->getFullString());
+    }
+
+    QVariant v = currentItem->data(32);
 }
 
 void MainWindow::on_actionGenerate_triggered() //When clicking the "Debug" button write all of the elements to a vector for future use
 {
     if(htmlstore.getSize() <= 0)
         htmlstore.initHtml();
-    MainWindow::getParsedItems();
+    MainWindow::generateHtml();
 }
 
 void MainWindow::on_actionReset_triggered()

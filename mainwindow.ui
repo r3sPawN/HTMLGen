@@ -65,32 +65,67 @@
       </property>
       <item>
        <property name="text">
-        <string>&lt;a&gt;</string>
+        <string>a</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>&lt;h1&gt;</string>
+        <string>h1</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>&lt;h2&gt;</string>
+        <string>h2</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>&lt;h3&gt;</string>
+        <string>h3</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>&lt;h4&gt;</string>
+        <string>h4</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>&lt;p&gt;</string>
+        <string>img</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>p</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>&lt;b&gt;</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>&lt;i&gt;</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>&lt;em&gt;</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>&lt;/b&gt;</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>&lt;/i&gt;</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>&lt;/em&gt;</string>
        </property>
       </item>
      </widget>
