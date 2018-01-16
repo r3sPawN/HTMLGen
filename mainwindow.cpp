@@ -7,7 +7,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    //this -> setCentralWidget(ui->textEdit); // centers the text edit space
+    on_actionNew_triggered();
+    setWindowTitle("Simple Html Generator");
 }
 
 MainWindow::~MainWindow()
@@ -17,7 +18,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_actionOpen_triggered() //open function
 {
-    QString File = QFileDialog::getOpenFileName(this,"Open a file"); //opening a window used to find a file
+    QString File = QFileDialog::getOpenFileName(this,"Open a file"), setFileMode("*html"); //opening a window used to find a file
     // need to add error checking
     QFile sFile(File);
     if(sFile.open(QFile::ReadOnly | QFile::Text))
@@ -27,6 +28,10 @@ void MainWindow::on_actionOpen_triggered() //open function
         sFile.close();
 
         ui->textEdit->setPlainText(text);
+        ui->textEdit->textChanged();
+
+        QFileInfo fileInfo(sFile);
+        setWindowTitle(fileInfo.fileName());
     }
 }
 
@@ -34,7 +39,9 @@ void MainWindow::on_actionNew_triggered() //new
 {
     sFilename = "";
     ui->textEdit->setPlainText("");
+    isUntitled = true;
 }
+
 
 void MainWindow::on_actionUndo_triggered() //undo
 {
@@ -46,26 +53,49 @@ void MainWindow::on_actionRedo_triggered() //redo
     ui->textEdit->redo();
 }
 
-void MainWindow::on_actionSave_triggered() //save (needs some more work)
+void MainWindow::on_actionSave_triggered()
 {
-    QFile sFile(sFilename);
-    if(sFile.open(QFile::WriteOnly | QFile::Text))
+
+    if(isUntitled == true)
     {
-        QTextStream out(&sFile);
+        return on_actionSave_as_triggered();
+    }
+    else
+    {
+        QFile sFile(sFilename);
+        if(sFile.open(QFile::WriteOnly | QFile::Text))
+        {
+            QTextStream out(&sFile);
 
-        out << ui -> textEdit -> toPlainText();
+            out << ui -> textEdit -> toPlainText();
 
-        sFile.flush();
-        sFile.close();
+            sFile.flush();
+            sFile.close();
 
-        QFileInfo fileInfo(sFile);
-        Path = fileInfo.absoluteFilePath();
+            QFileInfo fileInfo(sFile);
+            setWindowTitle(fileInfo.fileName());
+            Path = fileInfo.absoluteFilePath();
+        }
     }
 }
 
 void MainWindow::on_actionPreview_triggered() //Preview
 {
-    QDesktopServices::openUrl(QUrl(Path));
+    if (isUntitled == true)
+    {
+        QMessageBox::StandardButton ret;
+               ret = QMessageBox::warning(this, tr("warning"),
+                            tr("The document has been modified.\n"
+                               "Do you want to save your changes?"),
+                            QMessageBox::Save | QMessageBox::Discard
+                            | QMessageBox::Cancel);
+               if (ret == QMessageBox::Save)
+                   return on_actionSave_triggered();
+    }
+    else
+    {
+        QDesktopServices::openUrl(QUrl(Path));
+    }
 }
 
 void MainWindow::on_actionSave_as_triggered()
@@ -75,6 +105,7 @@ void MainWindow::on_actionSave_as_triggered()
     if(!File.isEmpty())
     {
         sFilename = File;
+        isUntitled = false;
         on_actionSave_triggered();
     }
 }
@@ -155,3 +186,4 @@ void MainWindow::on_actionReset_triggered()
     ui->parseElements->clear();
     ui->textEdit->clear();
 }
+

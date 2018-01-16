@@ -1,6 +1,7 @@
 #include "image.h"
 #include "ui_image.h"
 
+
 Image::Image(QWidget *parent, QString tag) :
     QDialog(parent),
     ui(new Ui::Image)

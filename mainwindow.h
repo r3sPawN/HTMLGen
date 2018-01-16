@@ -50,10 +50,12 @@ private slots:
 
     void on_actionReset_triggered();
 
+
 private:
     Ui::MainWindow *ui;
     QString sFilename;
     QString Path;
+    bool isUntitled;
 
     void generateHtml();
     HTMLStore htmlstore;
