@@ -86,11 +86,10 @@ void MainWindow::on_actionPreview_triggered() //Preview
     if (isUntitled == true)
     {
         QMessageBox::StandardButton ret;
-               ret = QMessageBox::warning(this, tr("warning"),
-                            tr("The document has been modified.\n"
-                               "Do you want to save your changes?"),
-                            QMessageBox::Save | QMessageBox::Discard
-                            | QMessageBox::Cancel);
+               ret = QMessageBox::warning(this, tr("Warning"),
+                            tr("The document has not been saved yet.\n"
+                               "Do you want to save it?"),
+                            QMessageBox::Save | QMessageBox::Discard);
                if (ret == QMessageBox::Save)
                    return on_actionSave_triggered();
     }
@@ -180,4 +179,9 @@ void MainWindow::on_actionGenerate_triggered() //When clicking the "Debug" butto
     if(htmlstore.getSize() <= 0)
         htmlstore.initHtml();
     MainWindow::generateHtml();
+}
+
+void MainWindow::on_actionExit_triggered()
+{
+    QApplication::quit();
 }

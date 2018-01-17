@@ -48,6 +48,8 @@ private slots:
 
     void on_actionGenerate_triggered();
 
+    void on_actionExit_triggered();
+
 private:
     Ui::MainWindow *ui;
     QString sFilename;
