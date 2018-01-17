@@ -38,8 +38,10 @@ void MainWindow::on_actionOpen_triggered() //open function
 void MainWindow::on_actionNew_triggered() //new
 {
     sFilename = "";
-    ui->textEdit->setPlainText("");
     isUntitled = true;
+    htmlstore.reset();
+    ui->parseElements->clear();
+    ui->textEdit->clear();
 }
 
 
@@ -179,11 +181,3 @@ void MainWindow::on_actionGenerate_triggered() //When clicking the "Debug" butto
         htmlstore.initHtml();
     MainWindow::generateHtml();
 }
-
-void MainWindow::on_actionReset_triggered()
-{
-    htmlstore.reset();
-    ui->parseElements->clear();
-    ui->textEdit->clear();
-}
-

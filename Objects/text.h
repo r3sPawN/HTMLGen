@@ -28,7 +28,7 @@ private:
     void getUserInput();
 
     QVector<QString> storage;
-    QString element, color, align, usertext, fullString;
+    QString element, color, align, fontface, usertext, fullString;
 };
 
 #endif // TEXT_H
