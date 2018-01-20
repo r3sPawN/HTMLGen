@@ -74,6 +74,8 @@ void MainWindow::on_actionSave_triggered()
             sFile.flush();
             sFile.close();
 
+            ui->statusBar->showMessage("Saved", 2000);
+
             QFileInfo fileInfo(sFile);
             setWindowTitle(fileInfo.fileName());
             Path = fileInfo.absoluteFilePath();
@@ -171,7 +173,6 @@ void MainWindow::on_parseElements_itemDoubleClicked()
         currentItem->setData(32, txt->getFullString());
     }
 
-    QVariant v = currentItem->data(32);
 }
 
 void MainWindow::on_actionGenerate_triggered() //When clicking the "Debug" button write all of the elements to a vector for future use

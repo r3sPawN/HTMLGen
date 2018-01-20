@@ -30,7 +30,7 @@ void Text::on_OkButton_clicked()
     storage.append(element);
     storage.append(" style=\"");
     storage.append("color: " + color + "; ");
-    storage.append("font-family: \"" + fontface + "\"; ");
+    storage.append("font-family: " + fontface + "; ");
     storage.append("text-align: " + align + ";\"");
     storage.append(">");
     storage.append(usertext);
