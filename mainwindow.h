@@ -26,9 +26,11 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
-    ~MainWindow();
+    explicit MainWindow(QWidget *parent = 0); //Constructor for the main window
+    ~MainWindow(); //Destructor
 
+
+//Slots for all the buttons in the menu bar and dropdown.
 private slots:
     void on_actionOpen_triggered();
 
@@ -51,13 +53,13 @@ private slots:
     void on_actionExit_triggered();
 
 private:
-    Ui::MainWindow *ui;
-    QString sFilename;
-    QString Path;
-    bool isUntitled;
+    Ui::MainWindow *ui; //UI for the main window
+    HTMLStore htmlstore; //HTMLStore class for data storage
 
-    void generateHtml();
-    HTMLStore htmlstore;
+    void generateHtml(); //Function to generate the HTML
+
+    bool isUntitled; //Boolean that holds information if sFilename is empty
+    QString sFilename, Path; //QStrings that contain the Filename and file path
 };
 
 #endif // MAINWINDOW_H

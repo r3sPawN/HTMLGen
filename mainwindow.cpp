@@ -1,26 +1,31 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+//George check line 28 and 74
 
+//Constructor function for main window
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    ui->setupUi(this);
-    on_actionNew_triggered();
-    setWindowTitle("Simple Html Generator");
+    ui->setupUi(this); //Initialize the UI
+    on_actionNew_triggered(); //Does some upkeep and triggers the "New" slot when the program runs
+    setWindowTitle("Simple Html Generator"); //Sets the title of the window
 }
 
+//Destructor
 MainWindow::~MainWindow()
 {
     delete ui;
 }
 
-void MainWindow::on_actionOpen_triggered() //open function
+//Function
+void MainWindow::on_actionOpen_triggered()
 {
     QString File = QFileDialog::getOpenFileName(this,"Open a file"), setFileMode("*html"); //opening a window used to find a file
     // need to add error checking
     QFile sFile(File);
+    /*================CHECK THIS CODE SNIP=================*/
     if(sFile.open(QFile::ReadOnly | QFile::Text))
     {
         QTextStream in(&sFile);
@@ -33,35 +38,40 @@ void MainWindow::on_actionOpen_triggered() //open function
         QFileInfo fileInfo(sFile);
         setWindowTitle(fileInfo.fileName());
     }
+    /*================CHECK THIS CODE SNIP END=================*/
 }
 
-void MainWindow::on_actionNew_triggered() //new
+//Function that does the necessary steps to ensure the new file does not have leftovers from previous edits
+void MainWindow::on_actionNew_triggered()
 {
-    sFilename = "";
-    isUntitled = true;
-    htmlstore.reset();
-    ui->parseElements->clear();
-    ui->textEdit->clear();
+    sFilename = ""; //Set sFilename to an empty string
+    isUntitled = true; //Indicate that the file is untitled
+    htmlstore.reset(); //Call the storage class function reset()
+    ui->parseElements->clear(); //Clear the elements from the QListWidget in the middle 'parseElements'
+    ui->textEdit->clear(); //Clear the text from the rightmost pane 'textEdit'
 }
 
-
-void MainWindow::on_actionUndo_triggered() //undo
+//Function to undo user input in textEdit field
+void MainWindow::on_actionUndo_triggered()
 {
-    ui->textEdit->undo();
+    ui->textEdit->undo(); //QT Built in undo
 }
 
-void MainWindow::on_actionRedo_triggered() //redo
+//Function to redo user input in textEdit field
+void MainWindow::on_actionRedo_triggered()
 {
-    ui->textEdit->redo();
+    ui->textEdit->redo(); //QT Built in redo
 }
 
+//Function to save the file. If a file path has not been defined, the function calls to Save As.
 void MainWindow::on_actionSave_triggered()
 {
 
-    if(isUntitled == true)
+    if(isUntitled == true) //Check whether the file has a name
     {
-        return on_actionSave_as_triggered();
+        on_actionSave_as_triggered(); //If it is untitled, call the SaveAs function
     }
+/*================CHECK THIS CODE SNIP=================*/
     else
     {
         QFile sFile(sFilename);
@@ -69,119 +79,144 @@ void MainWindow::on_actionSave_triggered()
         {
             QTextStream out(&sFile);
 
-            out << ui -> textEdit -> toPlainText();
+            out << ui -> textEdit -> toPlainText(); //Set the 'out' text stream to be the plaintext of 'textEdit'
 
-            sFile.flush();
-            sFile.close();
+            sFile.flush(); //Clear the sFile buffer
+            sFile.close(); //Close the sFile buffer
 
-            ui->statusBar->showMessage("Saved", 2000);
+            ui->statusBar->showMessage("Saved", 2000); //Show a message in the status bar for 2 seconds, indicating successful save
 
             QFileInfo fileInfo(sFile);
             setWindowTitle(fileInfo.fileName());
             Path = fileInfo.absoluteFilePath();
         }
     }
+/*================CHECK THIS CODE SNIP END=================*/
 }
 
+//
 void MainWindow::on_actionPreview_triggered() //Preview
 {
-    if (isUntitled == true)
+    if (isUntitled == true) //Check if the file has a name
     {
-        QMessageBox::StandardButton ret;
-               ret = QMessageBox::warning(this, tr("Warning"),
-                            tr("The document has not been saved yet.\n"
-                               "Do you want to save it?"),
-                            QMessageBox::Save | QMessageBox::Discard);
-               if (ret == QMessageBox::Save)
-                   return on_actionSave_triggered();
+        QMessageBox::StandardButton ret; //Create a messagebox that will show an error.
+        //Display the error in the string below and give it two options
+        ret = QMessageBox::warning (
+            this, tr("Warning"),
+            tr("The document has not been saved yet.\n"
+            "Do you want to save it?"),
+            QMessageBox::Save | QMessageBox::Discard //Option to save and to cancel
+        );
+
+        //If save is clicked, call slot Save
+        if (ret == QMessageBox::Save)
+            on_actionSave_triggered();
     }
+
     else
     {
-        QDesktopServices::openUrl(QUrl(Path));
+        QDesktopServices::openUrl(QUrl(Path)); //Open the file in a browser for viewing
     }
 }
 
+//Save as function with a QT File browser
 void MainWindow::on_actionSave_as_triggered()
 {
-    QString File = QFileDialog::getSaveFileName(this,"Saving a file");
+    QString File = QFileDialog::getSaveFileName(this,"Saving a file"); //Sets QString 'File' to the directory pickde by the user
 
-    if(!File.isEmpty())
+    if(!File.isEmpty()) //Check if 'File' is empty
     {
         sFilename = File;
-        isUntitled = false;
-        on_actionSave_triggered();
+        isUntitled = false; //Confirm that the file is not untitled
+        on_actionSave_triggered(); //Call to the Save function
     }
 }
 
-void MainWindow::generateHtml() //Generates html and outputs it to the text box on the right.
+/*Generates html and outputs it to the text box on the right.
+ *Important to note that for each QListWidgetItem(QLWI) there exists a "Role" with corresponding data
+ *
+ *Roles from 0 to 31 are reserved for QT
+ *First available Role for the application is 32, used in the function.
+ */
+void MainWindow::generateHtml()
 {
-    htmlstore.reset();
-    htmlstore.initHtml();
-    QListWidgetItem* nthItem;
-    QVariant itemData;
+    htmlstore.reset(); //Resets the HTML vector storage
+    htmlstore.initHtml(); //Reinitializes the HTML vector storage
+    QListWidgetItem* nthItem; //Creates a pointer to QLWI 'nthItem'
+    QVariant itemData; //Creates a QVariant 'itemData' which is the way to access a QLWI data slot.
 
-    for(int i = 0; i < ui->parseElements->count(); i++)
+    for(int i = 0; i < ui->parseElements->count(); i++) //Iterates through the elements of the QLW 'parseElements'
     {
-        nthItem = ui->parseElements->item(i);
-        if(nthItem->text().at(0) == "<")
-            nthItem->setData(32, nthItem->text());
+        nthItem = ui->parseElements->item(i); //Sets 'nthItem' to the QLWI with the corresponding index
 
-        itemData = nthItem->data(32);
+        //Performs several checks to determine the type of tag
+        if(nthItem->text().at(0) == "<") //If the text of the QLWI starts with a "<"
+            nthItem->setData(32, nthItem->text()); //Set the full string of the QLWI as the item data for role 32
 
-        if (itemData.value<QString>() == NULL)
+        itemData = nthItem->data(32); //Set 'itemData' to nthItem's data from role 32.
+
+        //Show an error message if the element has not been configured by the user.
+        if (itemData.value<QString>() == NULL)//Check if itemData's role 32 string is empty.
             nthItem->setData(32, "Element still uninitialized. Doubleclick it to get started!");
 
         itemData = nthItem->data(32);
+
+        //Insert the element at row 8+i. The reason behind that is because that's where the body tag in the HTML storage opens
         htmlstore.insertElement(i + 8, itemData.value<QString>());
     }
 
-    QString bodyContent = htmlstore.getAllElements();
-    ui->textEdit->setPlainText(bodyContent);
+    //Set the plain text of 'textEdit' to the returned value from the storage.
+    ui->textEdit->setPlainText(htmlstore.getAllElements());
 }
 
 void MainWindow::on_parseElements_itemDoubleClicked()
 {
-    QListWidgetItem* currentItem = ui->parseElements->currentItem();
-    QString currentItemString = currentItem->text();
+    QListWidgetItem* currentItem = ui->parseElements->currentItem(); //Creates a pointer to the doubleclicked item
+    QString currentItemString = currentItem->text(); //Creates a QString which is the text of 'currentItem'
 
+    //If it starts with "<", there's nothing to do, since it does not have user input to be edited.
     if (currentItemString.at(0) == "<")
     {
-        qDebug() << "Nothing to edit!" << endl;
+        qDebug() << "Nothing to edit!" << endl; //Print out an error message in the Application output
     }
 
+    //If the string of the current item is "img"
     else if (currentItemString == "img")
     {
-        Image* img = new Image(0, currentItemString);
-        img->setModal(true);
-        img->exec();
-        currentItem->setData(32, img->getFullString());
+        Image* img = new Image(0, currentItemString); //Create a new object of type Image, passing the tag needed for the class constructor
+        img->setModal(true); //Required user input, be it "OK" or "Cancel"
+        img->exec(); //Show the user input dialog
+        currentItem->setData(32, img->getFullString()); //Set the data of the current item to the fullstring returned from that object
     }
 
+    //If the string of the current item is "img"
     else if (currentItemString == "a")
     {
-        Link* url = new Link(0, currentItemString);
+        Link* url = new Link(0, currentItemString); //Create a new object of type Link, passing the tag needed for the class constructor
         url->setModal(true);
         url->exec();
         currentItem->setData(32, url->getFullString());
     }
 
+    //If the string of the current item is anything else (other options already covered), assume it is h1-6 or p
     else
     {
-        Text* txt = new Text(0, currentItemString);
+        Text* txt = new Text(0, currentItemString); //Create a new object of type Text, passing the tag needed for the class constructor
         txt->setModal(true);
         txt->exec();
         currentItem->setData(32, txt->getFullString());
     }
-
 }
 
-void MainWindow::on_actionGenerate_triggered() //When clicking the "Debug" button write all of the elements to a vector for future use
+//When clicking the Generate button call check for empty storage and call generateHtml()
+void MainWindow::on_actionGenerate_triggered()
 {
-    if(htmlstore.getSize() <= 0)
-        htmlstore.initHtml();
-    MainWindow::generateHtml();
+    if(htmlstore.getSize() <= 0) //Check if the size of the Storage vector class is 0 using implemented getSize()
+        htmlstore.initHtml(); //If true use the storage vector member function initHtml
+    generateHtml(); //Generate HTML function
 }
 
+//Function to quit the application when the X button is pressed
 void MainWindow::on_actionExit_triggered()
 {
     QApplication::quit();
