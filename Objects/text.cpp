@@ -28,7 +28,11 @@ void Text::getUserInput()
     //Appends the tag variables into a QVector of QStrings which represents a valid HTML tag
     storage.append("<" + element + " style=\"");
     storage.append("color: " + color + "; ");
-    storage.append("font-family: " + fontface + "; ");
+
+    //Checks if user input for font face is empty and ommits it in the tag generation
+    if (fontface != "")
+        storage.append("font-family: " + fontface + "; ");
+
     storage.append("text-align: " + align + ";\">");
     storage.append(usertext);
     storage.append("</" + element + ">");
