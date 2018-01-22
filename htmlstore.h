@@ -6,18 +6,18 @@
 class HTMLStore
 {
 public:
-    HTMLStore();
-    ~HTMLStore();
+    HTMLStore(); //Class constructor
+    ~HTMLStore(); //Class destructor
 
-    void insertElement(int line, QString text);
-    QString getElementAt(int i);
-    QString getAllElements();
-    int getSize();
-    void reset();
-    void initHtml();
+    void insertElement(int line, QString text); //Insert a QString at given index
+    QString getElementAt(int i); //Return the QString of index i
+    QString getAllElements(); //Return all elements from the HTML Storage Vector
+    int getSize(); //Get size of the vector
+    void reset(); //Reset the vector and free up the memory
+    void initHtml(); //Initialize the basic HTML skeleton/template.
 
 private:
-    QVector<QString> htmlText;
+    QVector<QString> htmlText; //QVector of QStrings that holds the skeleton plus user content
 
 };
 
