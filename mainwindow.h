@@ -59,8 +59,6 @@ private:
     HTMLStore htmlstore; //HTMLStore class for data storage
 
     void generateHtml(); //Function to generate the HTML
-
-    bool isUntitled; //Boolean that holds information if sFilename is empty
     QString sFilename, Path; //QStrings that contain the Filename and file path
 };
 

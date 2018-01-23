@@ -1,8 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-//George check line 28 and 74
-
 //Constructor function for main window
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -22,23 +20,31 @@ MainWindow::~MainWindow()
 //Function
 void MainWindow::on_actionOpen_triggered()
 {
-    QString File = QFileDialog::getOpenFileName(this,"Open a file"), setFileMode("*html"); //opening a window used to find a file
-    // need to add error checking
+    QString File = QFileDialog::getOpenFileName(this,"Open a file"),
+                    setFileMode("*html"); //opening a window used to find a file
+
     QFile sFile(File);
-    /*================CHECK THIS CODE SNIP=================*/
-    if(sFile.open(QFile::ReadOnly | QFile::Text))
+    if(!sFile.open(QFile::ReadOnly | QFile::Text))
+    {
+        QMessageBox::warning(this,tr("The program could not open the file!"),
+                             tr("Can not open file %1:\n%2.").arg(sFilename)
+                             .arg(sFile.errorString()));
+    }
+    else
     {
         QTextStream in(&sFile);
-        QString text = in.readAll();
+        QString text = in.readAll(); // reads from the stream and put it into a string
         sFile.close();
 
         ui->textEdit->setPlainText(text);
         ui->textEdit->textChanged();
 
-        QFileInfo fileInfo(sFile);
+        QFileInfo fileInfo(sFile); //provides information-file name
+        sFilename = fileInfo.fileName();
         setWindowTitle(fileInfo.fileName());
+        Path = fileInfo.absoluteFilePath(); //saves the path of the lattest saved file
     }
-    /*================CHECK THIS CODE SNIP END=================*/
+
 }
 
 //Function that does the necessary steps to ensure the new file does not have leftovers from previous edits
@@ -126,8 +132,6 @@ void MainWindow::on_actionSave_as_triggered()
 
     if(!sFilename.isEmpty()) //Check if 'File' is empty
     {
-        //sFilename = File;
-        isUntitled = false; //Confirm that the file is not untitled
         on_actionSave_triggered(); //Call to the Save function
     }
 }
