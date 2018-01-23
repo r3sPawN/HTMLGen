@@ -131,9 +131,7 @@ void MainWindow::on_actionSave_as_triggered()
     sFilename = QFileDialog::getSaveFileName(this,"Saving a file"); //Sets QString 'File' to the directory pickde by the user
 
     if(!sFilename.isEmpty()) //Check if 'File' is empty
-    {
         on_actionSave_triggered(); //Call to the Save function
-    }
 }
 
 /*Generates html and outputs it to the text box on the right.
