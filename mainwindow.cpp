@@ -45,7 +45,6 @@ void MainWindow::on_actionOpen_triggered()
 void MainWindow::on_actionNew_triggered()
 {
     sFilename = ""; //Set sFilename to an empty string
-    isUntitled = true; //Indicate that the file is untitled
     htmlstore.reset(); //Call the storage class function reset()
     ui->parseElements->clear(); //Clear the elements from the QListWidget in the middle 'parseElements'
     ui->textEdit->clear(); //Clear the text from the rightmost pane 'textEdit'
@@ -66,38 +65,40 @@ void MainWindow::on_actionRedo_triggered()
 //Function to save the file. If a file path has not been defined, the function calls to Save As.
 void MainWindow::on_actionSave_triggered()
 {
+    QFile sFile(sFilename);
 
-    if(isUntitled == true) //Check whether the file has a name
+    if(sFilename.isEmpty()== true) //Check whether the file has a name
     {
         on_actionSave_as_triggered(); //If it is untitled, call the SaveAs function
     }
-/*================CHECK THIS CODE SNIP=================*/
     else
     {
-        QFile sFile(sFilename);
-        if(sFile.open(QFile::WriteOnly | QFile::Text))
+        if(!sFile.open(QFile::WriteOnly | QFile::Text)) // Printss error messege if it fails to open
         {
-            QTextStream out(&sFile);
-
-            out << ui -> textEdit -> toPlainText(); //Set the 'out' text stream to be the plaintext of 'textEdit'
-
-            sFile.flush(); //Clear the sFile buffer
-            sFile.close(); //Close the sFile buffer
-
-            ui->statusBar->showMessage("Saved", 2000); //Show a message in the status bar for 2 seconds, indicating successful save
-
-            QFileInfo fileInfo(sFile);
-            setWindowTitle(fileInfo.fileName());
-            Path = fileInfo.absoluteFilePath();
+            QMessageBox::warning(this, tr("Error saving file"),
+                                 tr("Cannot write file %1:\n%2.").arg(sFilename)
+                                 .arg(sFile.errorString()));
         }
+
+        QTextStream out(&sFile);
+
+        out << ui -> textEdit -> toPlainText(); //Set the 'out' text stream to be the plaintext of 'textEdit'
+
+        sFile.flush(); //Clear the sFile buffer
+        sFile.close(); //Close the sFile buffer
+
+        ui->statusBar->showMessage("Saved", 2000); //Show a message in the status bar for 2 seconds, indicating successful save
+
+        QFileInfo fileInfo(sFile);
+        setWindowTitle(fileInfo.fileName());
+        Path = fileInfo.absoluteFilePath(); //saves the path of the lattest saved file
     }
-/*================CHECK THIS CODE SNIP END=================*/
 }
 
 //
 void MainWindow::on_actionPreview_triggered() //Preview
 {
-    if (isUntitled == true) //Check if the file has a name
+    if (sFilename.isEmpty() == true) //Check if the file has a name
     {
         QMessageBox::StandardButton ret; //Create a messagebox that will show an error.
         //Display the error in the string below and give it two options
@@ -112,7 +113,6 @@ void MainWindow::on_actionPreview_triggered() //Preview
         if (ret == QMessageBox::Save)
             on_actionSave_triggered();
     }
-
     else
     {
         QDesktopServices::openUrl(QUrl(Path)); //Open the file in a browser for viewing
@@ -122,11 +122,11 @@ void MainWindow::on_actionPreview_triggered() //Preview
 //Save as function with a QT File browser
 void MainWindow::on_actionSave_as_triggered()
 {
-    QString File = QFileDialog::getSaveFileName(this,"Saving a file"); //Sets QString 'File' to the directory pickde by the user
+    sFilename = QFileDialog::getSaveFileName(this,"Saving a file"); //Sets QString 'File' to the directory pickde by the user
 
-    if(!File.isEmpty()) //Check if 'File' is empty
+    if(!sFilename.isEmpty()) //Check if 'File' is empty
     {
-        sFilename = File;
+        //sFilename = File;
         isUntitled = false; //Confirm that the file is not untitled
         on_actionSave_triggered(); //Call to the Save function
     }
@@ -216,8 +216,16 @@ void MainWindow::on_actionGenerate_triggered()
     generateHtml(); //Generate HTML function
 }
 
-//Function to quit the application when the X button is pressed
+//Function to quit the application when the exit button is pressed
 void MainWindow::on_actionExit_triggered()
 {
     QApplication::quit();
+}
+
+//Function to delete an element from the list
+void MainWindow::on_actionDelete_triggered()
+{
+    QListWidgetItem* toDelete = ui->parseElements->currentItem();
+    delete ui->parseElements->takeItem(ui->parseElements->row(toDelete));
+    on_actionGenerate_triggered();
 }
